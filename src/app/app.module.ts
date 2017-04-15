@@ -6,6 +6,8 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { TradeComponent } from './trade/trade.component';
 
+import { D3Service } from 'd3-ng2-service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -16,7 +18,7 @@ import { TradeComponent } from './trade/trade.component';
     FormsModule,
     HttpModule
   ],
-  providers: [],
+  providers: [D3Service],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
