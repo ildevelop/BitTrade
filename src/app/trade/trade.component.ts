@@ -27,7 +27,7 @@ export class TradeComponent implements OnInit {
     // });
     this.options = {
       chart: {
-        type: 'linePlusBarWithFocusChart',
+        type: 'stackedAreaChart',
         height: 450,
         margin : {
           top: 20,
@@ -80,7 +80,7 @@ export class TradeComponent implements OnInit {
         values: sin2,
         key: 'ETH',
         color: '#7777ff',
-        area: true      //area - set to true if you want this line to turn into a filled area chart.
+              //area - set to true if you want this line to turn into a filled area chart.
       }
     ];
   }
