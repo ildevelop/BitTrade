@@ -14,7 +14,6 @@ declare let d3: any;
 
 
 export class TradeComponent implements OnInit {
-
   constructor( ) { }
   public options: any;
   public data: any;
@@ -28,7 +27,7 @@ export class TradeComponent implements OnInit {
     // });
     this.options = {
       chart: {
-        type: 'lineChart',
+        type: 'linePlusBarWithFocusChart',
         height: 450,
         margin : {
           top: 20,
@@ -40,12 +39,12 @@ export class TradeComponent implements OnInit {
         y: function(d){ return d.y; },
         useInteractiveGuideline: true,
         xAxis: {
-          axisLabel: 'Time (ms)'
+          axisLabel: 'Time (s)'
         },
         yAxis: {
           axisLabel: 'BTC (v)',
           tickFormat: function(d){
-            return d3.format('.02f')(d);
+            return d3.format('0.4f')(d);
           },
           axisLabelDistance: -10
         }
@@ -59,32 +58,30 @@ export class TradeComponent implements OnInit {
   sinAndCos() {
     var sin = [],sin2 = [],
       cos = [];
-
-    //Data is represented as an array of {x,y} pairs.
     for (var i = 0; i < 100; i++) {
       sin.push({x: i, y: Math.sin(i/10)});
       sin2.push({x: i, y: i % 10 == 5 ? null : Math.sin(i/10) *0.25 + 0.5});
       cos.push({x: i, y: .5 * Math.cos(i/10+ 2) + Math.random() / 10});
     }
+    //Data is represented as an array of {x,y} pairs.
     //Line chart data should be sent as an array of series objects.
     return [
       {
-        values:  sin,      //values - represents the array of {x,y} data points
-        key: 'Price', //key  - the name of the series.
-        color: '#ff7f0e'  //color - optional: choose your own line color.
+        values: sin,      //values - represents the array of {x,y} data points
+        key: 'BTC', //key  - the name of the series.
+        color: '#ff3c2e'  //color - optional: choose your own line color.
       },
       {
         values: cos,
-        key: 'Quantity',
+        key: 'LTC',
         color: '#2ca02c'
       },
       {
         values: sin2,
-        key: 'currency',
+        key: 'ETH',
         color: '#7777ff',
         area: true      //area - set to true if you want this line to turn into a filled area chart.
       }
-
     ];
   }
   private set_data(res: Response) {
