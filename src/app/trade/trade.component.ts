@@ -1,96 +1,55 @@
-import {Component, OnInit, OnChanges, ElementRef, Inject, ViewChild} from '@angular/core';
-// import {BitcoinApiService} from "../bitcoin.api.service";
 
-import {Response} from "@angular/http";
-import {nvD3} from "ng2-nvd3";
-declare let d3: any;
+import {Component, ElementRef, OnInit} from '@angular/core';
+
+import {
+  D3Service,
+  D3,
+} from 'd3-ng2-service';
 
 @Component({
-  selector: 'trade',
-  inputs: ['options', 'data'],
+  selector: 'app-trade',
   templateUrl: './trade.component.html',
-  styleUrls: ['./trade.component.sass'],
+  styleUrls: ['./trade.component.sass']
 })
-
-
 export class TradeComponent implements OnInit {
-  constructor( ) { }
-  public options: any;
-  public data: any;
-  public btce_array: number[];
-  el: any;
-  chart: any;
-  svg: any;
-  ngOnInit(){
-    // this.backendApi.get_market_data().subscribe(res => {
-    //   this.set_data(res)
-    // });
-    this.options = {
-      chart: {
-        type: 'stackedAreaChart',
-        height: 450,
-        margin : {
-          top: 20,
-          right: 20,
-          bottom: 40,
-          left: 55
-        },
-        x: function(d){ return d.x; },
-        y: function(d){ return d.y; },
-        useInteractiveGuideline: true,
-        xAxis: {
-          axisLabel: 'Time (s)'
-        },
-        yAxis: {
-          axisLabel: 'BTC (v)',
-          tickFormat: function(d){
-            return d3.format('0.4f')(d);
-          },
-          axisLabelDistance: -10
-        }
-      }
-    };
-
-    this.data = this.sinAndCos();
+  private bookU= './assets/bit.json';
+  private d3: D3;
+  private parentNativeElement: any;
+  constructor(element: ElementRef, private d3Service: D3Service) {
+    this.d3 = d3Service.getD3();
+    this.parentNativeElement = element.nativeElement;
   }
 
-
-  sinAndCos() {
-    var sin = [],sin2 = [],
-      cos = [];
-    for (var i = 0; i < 100; i++) {
-      sin.push({x: i, y: Math.sin(i/10)});
-      sin2.push({x: i, y: i % 10 == 5 ? null : Math.sin(i/10) *0.25 + 0.5});
-      cos.push({x: i, y: .5 * Math.cos(i/10+ 2) + Math.random() / 10});
+  ngOnInit() {
+    let w: number;
+    w = 200;
+    let h: number;
+    h = 1000;
+    const padding = 2;
+    const dataChart = ['401', '72', '100' , '158', '207', '563', '444', '3', '650'];
+    const svg = this.d3.select('body').append('svg')
+      .attr('width', w)
+      .attr('height', h);
+    svg.selectAll('rect')
+      .data(dataChart)
+      .enter()
+      .append('rect')
+      .attr('x', function (d, i) {
+        return(i * ( w / dataChart.length));
+      })
+      .attr('y', function(d){
+        // console.log(Number(d) * 2);
+        return h - Number(d) ; })
+      .attr('width', w / dataChart.length - padding)
+      .attr('height', function (d) {
+        return d;
+      })
+      .attr('fill', function(d){
+        // return '#ff3c2e';
+        const fillColor = (Number(d) - Number(d) % 10) / 10 + Number(d) % 10;
+        console.log(fillColor);
+        return 'rgb(0 ,' + fillColor + ',0)';
+      });
     }
-    //Data is represented as an array of {x,y} pairs.
-    //Line chart data should be sent as an array of series objects.
-    return [
-      {
-        values: sin,      //values - represents the array of {x,y} data points
-        key: 'BTC', //key  - the name of the series.
-        color: '#ff3c2e'  //color - optional: choose your own line color.
-      },
-      {
-        values: cos,
-        key: 'LTC',
-        color: '#2ca02c'
-      },
-      {
-        values: sin2,
-        key: 'ETH',
-        color: '#7777ff',
-              //area - set to true if you want this line to turn into a filled area chart.
-      }
-    ];
-  }
-  private set_data(res: Response) {
-    console.log("res="+res.json());
-    let data_array = res.json()
-    for (let i =0; i<20; i++){
-      this.btce_array.push(data_array[i][5])
-    }
-  }
-
-
 }
+

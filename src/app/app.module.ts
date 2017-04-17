@@ -7,13 +7,11 @@ import { AppComponent } from './app.component';
 import { TradeComponent } from './trade/trade.component';
 
 import { D3Service } from 'd3-ng2-service';
-import {nvD3} from "ng2-nvd3";
 
 @NgModule({
   declarations: [
     AppComponent,
-    TradeComponent,
-    nvD3
+    TradeComponent
   ],
   imports: [
     BrowserModule,
